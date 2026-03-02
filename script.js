@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
 
         // التأكد من أن المستخدم قيّم الخيارات المطلوبة
+        const branchCheck = document.querySelector('input[name="Branch"]:checked');
         const barcodeVal = document.getElementById('patientBarcodeInput').value;
         const receptionRating = document.getElementById('receptionRatingInput').value;
         const nursingRating = document.getElementById('nursingRatingInput').value;
@@ -44,8 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const cleaningRating = document.getElementById('cleaningRatingInput').value;
         const handoverRating = document.getElementById('handoverRatingInput').value;
 
-        if (!barcodeVal || receptionRating == 0 || nursingRating == 0 || doctorsRating == 0 || equipmentRating == 0 || cleaningRating == 0 || handoverRating == 0) {
-            alert("يرجى التأكد من مسح كود المريض واختيار تقييم في جميع الخطوات قبل الإرسال.");
+        if (!branchCheck || !barcodeVal || receptionRating == 0 || nursingRating == 0 || doctorsRating == 0 || equipmentRating == 0 || cleaningRating == 0 || handoverRating == 0) {
+            alert("يرجى التأكد من اختيار الفرع ومسح كود المريض واختيار تقييم في جميع الخطوات قبل الإرسال.");
             return;
         }
 
@@ -112,11 +113,17 @@ function nextStep(stepIndex) {
     // التحقق من الحقول المطلوبة لكل خطوة على حدة
     let ratingInputId = null;
 
-    // تحقق من كود المريض في الخطوة الأولى
+    // تحقق من الفرع وكود المريض في الخطوة الأولى
     if (stepIndex === 1) {
+        const branchCheck = document.querySelector('input[name="Branch"]:checked');
+        if (!branchCheck) {
+            alert("يرجى اختيار الفرع أولاً.");
+            return;
+        }
+
         const barcodeVal = document.getElementById('patientBarcodeInput').value.trim();
         if (!barcodeVal) {
-            alert("يرجى إدخال أو مسح كود المريض أولاً.");
+            alert("يرجى إدخال أو مسح كود المريض.");
             return;
         }
     }

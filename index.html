@@ -38,8 +38,32 @@
             <div class="step active" id="step-1">
                 <div class="form-group text-center">
                     <label>الخطوة 1: بيانات المريض</label>
-                    <p class="desc">نحن نهتم بأدق التفاصيل. يُرجى مسح كود المريض الموجود على الورقة أو إدخاله يدوياً قبل
-                        بدء التقييم.</p>
+                    <p class="desc">نحن نهتم بأدق التفاصيل. يُرجى اختيار الفرع ومسح كود المريض الموجود على الورقة أو
+                        إدخاله يدوياً قبل بدء التقييم.</p>
+
+                    <!-- اختيار الفرع -->
+                    <div style="margin-bottom: 25px; text-align: right;">
+                        <label style="font-size: 16px; font-weight: bold; color: var(--text-dark);">اختر الفرع <span
+                                style="color: red;">*</span></label>
+                        <div class="branch-grid">
+                            <label class="branch-radio"><input type="radio" name="Branch" value="الاداري">
+                                <span>الاداري</span></label>
+                            <label class="branch-radio"><input type="radio" name="Branch" value="اخر فيصل"> <span>اخر
+                                    فيصل</span></label>
+                            <label class="branch-radio"><input type="radio" name="Branch" value="حدائق الاهرام">
+                                <span>حدائق الاهرام</span></label>
+                            <label class="branch-radio"><input type="radio" name="Branch" value="السيده زينب">
+                                <span>السيده زينب</span></label>
+                            <label class="branch-radio"><input type="radio" name="Branch" value="المقطم">
+                                <span>المقطم</span></label>
+                            <label class="branch-radio"><input type="radio" name="Branch" value="المنيا">
+                                <span>المنيا</span></label>
+                            <label class="branch-radio"><input type="radio" name="Branch" value="روكسي">
+                                <span>روكسي</span></label>
+                            <label class="branch-radio"><input type="radio" name="Branch" value="ميت غمر"> <span>ميت
+                                    غمر</span></label>
+                        </div>
+                    </div>
 
                     <!-- حاوية الكاميرا -->
                     <div id="reader-container"

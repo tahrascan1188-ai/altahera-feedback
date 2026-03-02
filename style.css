@@ -180,6 +180,53 @@ textarea:focus {
 }
 
 /* ==================================
+   شبكة اختيار الفرع (Branch Grid) 
+   ================================== */
+.branch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.branch-radio {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+}
+
+.branch-radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.branch-radio span {
+    display: block;
+    padding: 12px 10px;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.branch-radio:hover span {
+    border-color: rgba(138, 42, 116, 0.4);
+    background: #fff;
+}
+
+.branch-radio input:checked~span {
+    background: rgba(138, 42, 116, 0.08);
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: 0 4px 10px rgba(138, 42, 116, 0.15);
+}
+
+/* ==================================
    الخطوات (Multi-step Form) 
    ================================== */
 
