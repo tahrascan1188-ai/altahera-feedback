@@ -396,16 +396,153 @@ textarea:focus {
     }
 }
 
-@media (max-width: 600px) {
+/* ==================================
+   التجاوب مع الشاشات (Responsive Design)
+   ================================== */
+
+@media (max-width: 991px) {
+
+    /* Tablets */
+    .container {
+        padding: 10px;
+    }
+
     .feedback-card {
-        padding: 30px 20px;
+        padding: 40px 30px;
+        margin: 20px auto;
+    }
+
+    .header h1 {
+        font-size: 32px;
+    }
+
+    .header h2 {
+        font-size: 18px;
+    }
+
+    .emojis {
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .emoji {
+        width: 60px;
+        height: 60px;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .submit-btn {
+        padding: 14px 25px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    /* Mobile Phones */
+    .container {
+        padding: 5px;
+    }
+
+    .feedback-card {
+        padding: 25px 15px;
+        margin: 10px auto;
+        border-radius: 20px;
+    }
+
+    .header .logo {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 15px;
     }
 
     .header h1 {
         font-size: 26px;
     }
 
-    .star {
-        font-size: 32px;
+    .header p {
+        font-size: 16px;
+    }
+
+    .header h2 {
+        font-size: 15px;
+        margin: 15px auto 25px auto;
+        padding: 10px 15px;
+    }
+
+    .form-group label {
+        font-size: 17px;
+    }
+
+    .desc {
+        font-size: 14px;
+    }
+
+    .emojis {
+        gap: 8px;
+        flex-wrap: wrap;
+        /* للسماح بالنزول لسطر جديد إذا ضاقت الشاشة */
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .emoji-wrapper {
+        flex: 1 1 30%;
+        /* كل وجه يأخذ ثلث المساحة تقريباً */
+        min-width: 80px;
+        padding: 10px 5px;
+    }
+
+    .emoji {
+        width: 50px;
+        height: 50px;
+    }
+
+    .emoji-wrapper span {
+        font-size: 12px;
+    }
+
+    .step-actions {
+        flex-direction: column-reverse;
+        /* وضع الزر الأساسي بالأعلى في الموبايل */
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .step-actions.split {
+        flex-direction: column-reverse;
+    }
+
+    .step-actions button {
+        width: 100%;
+        /* الأزرار تأخذ العرض بالكامل */
+    }
+
+    input[type="text"],
+    textarea {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    /* تعديلات لمكونات ماسح الباركود على الموبايل */
+    div[style*="display: flex; gap: 10px"] {
+        flex-direction: column;
+    }
+
+    #btnScan {
+        justify-content: center;
+    }
+}
+
+/* شاشات الجوالات الصغيرة جداً */
+@media (max-width: 380px) {
+    .emoji-wrapper {
+        flex: 1 1 45%;
+        /* كل وجهين في سطر */
+    }
+
+    .header h1 {
+        font-size: 22px;
     }
 }
