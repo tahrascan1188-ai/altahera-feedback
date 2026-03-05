@@ -113,7 +113,7 @@ function nextStep(stepIndex) {
     // التحقق من الحقول المطلوبة لكل خطوة على حدة
     let ratingInputId = null;
 
-    // تحقق من الفرع وكود المريض في الخطوة الأولى
+    // تحقق من الفرع وكود المريض ورقم المحمول في الخطوة الأولى
     if (stepIndex === 1) {
         const branchCheck = document.querySelector('input[name="Branch"]:checked');
         if (!branchCheck) {
@@ -124,6 +124,12 @@ function nextStep(stepIndex) {
         const barcodeVal = document.getElementById('patientBarcodeInput').value.trim();
         if (!barcodeVal) {
             alert("يرجى إدخال أو مسح كود المريض.");
+            return;
+        }
+
+        const mobileVal = document.getElementById('patientMobileInput').value.trim();
+        if (!mobileVal) {
+            alert("يرجى إدخال رقم المحمول.");
             return;
         }
     }
