@@ -132,6 +132,10 @@ function nextStep(stepIndex) {
             alert("يرجى إدخال رقم المحمول.");
             return;
         }
+        if (mobileVal.length < 11) {
+            alert("رقم المحمول يجب أن يكون 11 رقماً على الأقل.");
+            return;
+        }
     }
 
     switch (stepIndex) {
