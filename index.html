@@ -43,24 +43,18 @@
 
                     <!-- اختيار الفرع -->
                     <div style="margin-bottom: 25px; text-align: right;">
-                        <label style="font-size: 16px; font-weight: bold; color: var(--text-dark);">اختر الفرع <span
-                                style="color: red;">*</span></label>
-                        <div class="branch-grid">
-                            <label class="branch-radio"><input type="radio" name="Branch" value="اخر فيصل"> <span>اخر
-                                    فيصل</span></label>
-                            <label class="branch-radio"><input type="radio" name="Branch" value="حدائق الاهرام">
-                                <span>حدائق الاهرام</span></label>
-                            <label class="branch-radio"><input type="radio" name="Branch" value="السيده زينب">
-                                <span>السيده زينب</span></label>
-                            <label class="branch-radio"><input type="radio" name="Branch" value="المقطم">
-                                <span>المقطم</span></label>
-                            <label class="branch-radio"><input type="radio" name="Branch" value="المنيا">
-                                <span>المنيا</span></label>
-                            <label class="branch-radio"><input type="radio" name="Branch" value="روكسي">
-                                <span>روكسي</span></label>
-                            <label class="branch-radio"><input type="radio" name="Branch" value="ميت غمر"> <span>ميت
-                                    غمر</span></label>
-                        </div>
+                        <label style="font-size: 16px; font-weight: bold; color: var(--text-dark);"
+                            for="branchSelect">اختر الفرع <span style="color: red;">*</span></label>
+                        <select name="Branch" id="branchSelect" required style="margin-top: 10px;">
+                            <option value="" disabled selected>-- يرجى اختيار الفرع --</option>
+                            <option value="اخر فيصل">اخر فيصل</option>
+                            <option value="حدائق الاهرام">حدائق الاهرام</option>
+                            <option value="السيده زينب">السيده زينب</option>
+                            <option value="المقطم">المقطم</option>
+                            <option value="المنيا">المنيا</option>
+                            <option value="روكسي">روكسي</option>
+                            <option value="ميت غمر">ميت غمر</option>
+                        </select>
                     </div>
 
                     <!-- حاوية الكاميرا -->

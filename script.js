@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
 
         // التأكد من أن المستخدم قيّم الخيارات المطلوبة
-        const branchCheck = document.querySelector('input[name="Branch"]:checked');
+        const branchCheck = document.getElementById('branchSelect').value;
         const barcodeVal = document.getElementById('patientBarcodeInput').value;
         const receptionRating = document.getElementById('receptionRatingInput').value;
         const nursingRating = document.getElementById('nursingRatingInput').value;
@@ -115,7 +115,7 @@ function nextStep(stepIndex) {
 
     // تحقق من الفرع وكود المريض ورقم المحمول في الخطوة الأولى
     if (stepIndex === 1) {
-        const branchCheck = document.querySelector('input[name="Branch"]:checked');
+        const branchCheck = document.getElementById('branchSelect').value;
         if (!branchCheck) {
             alert("يرجى اختيار الفرع أولاً.");
             return;
