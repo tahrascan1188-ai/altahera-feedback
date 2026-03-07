@@ -57,6 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(form);
 
+        // Add dummy values for removed columns to avoid breaking Google Apps Script
+        formData.append('ReceptionRating', overallRating);
+        formData.append('NursingRating', overallRating);
+        formData.append('DoctorsRating', overallRating);
+        formData.append('EquipmentRating', overallRating);
+        formData.append('CleaningRating', overallRating);
+        formData.append('HandoverRating', overallRating);
+        formData.append('PatientBarcode', 'لا يوجد');
+
         fetch(scriptURL, { method: 'POST', body: formData })
             .then(response => {
                 // إظهار رسالة النجاح
