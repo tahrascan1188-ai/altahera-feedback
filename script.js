@@ -39,15 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const branchCheck = document.getElementById('branchSelect').value;
         const patientName = document.getElementById('patientNameInput').value.trim();
         const patientMobile = document.getElementById('patientMobileInput').value.trim();
-        const receptionRating = document.getElementById('receptionRatingInput').value;
-        const nursingRating = document.getElementById('nursingRatingInput').value;
-        const doctorsRating = document.getElementById('doctorsRatingInput').value;
-        const equipmentRating = document.getElementById('equipmentRatingInput').value;
-        const cleaningRating = document.getElementById('cleaningRatingInput').value;
-        const handoverRating = document.getElementById('handoverRatingInput').value;
+        const overallRating = document.getElementById('overallRatingInput').value;
 
-        if (!branchCheck || !patientName || !patientMobile || receptionRating == 0 || nursingRating == 0 || doctorsRating == 0 || equipmentRating == 0 || cleaningRating == 0 || handoverRating == 0) {
-            alert("يرجى التأكد من ملء جميع البيانات والتقييمات المطلوبة.");
+        if (!branchCheck || !patientName || !patientMobile || overallRating == 0) {
+            alert("يرجى التأكد من ملء جميع البيانات والتقييم واختيار الفرع قبل الإرسال.");
             return;
         }
 
