@@ -5,13 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تقييم مركز الطاهرة للأشعة والتحاليل الطبية</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     <!-- إضافة ايقونة التبويب في المتصفح -->
     <link rel="icon" type="image/x-icon" href="CleanIcon-9.jpg">
     <!-- استخدام خطوط جوجل الحديثة (Tajawal) لتجربة UI احترافية -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <!-- مكتبة قراءة الباركود (HTML5 QR Code) -->
-    <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 
 <body>
@@ -29,272 +27,193 @@
         <!-- سنربط هذا النموذج بجوجل شيت لاحقاً عبر سكريبت الخوادم -->
         <form id="feedbackForm" name="google-sheet">
 
-            <!-- شريط التقدم -->
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="progressBar" style="width: 20%;"></div>
+            <!-- بيانات المريض -->
+            <div class="form-group text-center">
+                <label>بيانات المريض</label>
+                <p class="desc">يُرجى اختيار الفرع وإدخال بياناتك قبل بدء التقييم.</p>
+
+                <!-- اختيار الفرع -->
+                <div style="margin-bottom: 25px; text-align: right;">
+                    <label style="font-size: 16px; font-weight: bold; color: var(--text-dark);" for="branchSelect">اختر
+                        الفرع <span style="color: red;">*</span></label>
+                    <select name="Branch" id="branchSelect" required style="margin-top: 10px;">
+                        <option value="" disabled selected>-- يرجى اختيار الفرع --</option>
+                        <option value="اخر فيصل">اخر فيصل</option>
+                        <option value="حدائق الاهرام">حدائق الاهرام</option>
+                        <option value="السيده زينب">السيده زينب</option>
+                        <option value="المقطم">المقطم</option>
+                        <option value="المنيا">المنيا</option>
+                        <option value="روكسي">روكسي</option>
+                        <option value="ميت غمر">ميت غمر</option>
+                    </select>
+                </div>
+
+                <input type="text" name="PatientName" placeholder="أدخل اسم المريض هنا (مجبر)..." id="patientNameInput"
+                    style="margin-bottom: 15px;" required>
+                <input type="tel" name="PatientMobile" placeholder="أدخل رقم المحمول هنا (11 رقم على الأقل)..."
+                    id="patientMobileInput" dir="rtl" minlength="11" required>
             </div>
 
-            <!-- الخطوة 1: كود المريض والاسم -->
-            <div class="step active" id="step-1">
-                <div class="form-group text-center">
-                    <label>الخطوة 1: بيانات المريض</label>
-                    <p class="desc">نحن نهتم بأدق التفاصيل. يُرجى اختيار الفرع ومسح كود المريض الموجود على الورقة أو
-                        إدخاله يدوياً قبل بدء التقييم.</p>
-
-                    <!-- اختيار الفرع -->
-                    <div style="margin-bottom: 25px; text-align: right;">
-                        <label style="font-size: 16px; font-weight: bold; color: var(--text-dark);"
-                            for="branchSelect">اختر الفرع <span style="color: red;">*</span></label>
-                        <select name="Branch" id="branchSelect" required style="margin-top: 10px;">
-                            <option value="" disabled selected>-- يرجى اختيار الفرع --</option>
-                            <option value="اخر فيصل">اخر فيصل</option>
-                            <option value="حدائق الاهرام">حدائق الاهرام</option>
-                            <option value="السيده زينب">السيده زينب</option>
-                            <option value="المقطم">المقطم</option>
-                            <option value="المنيا">المنيا</option>
-                            <option value="روكسي">روكسي</option>
-                            <option value="ميت غمر">ميت غمر</option>
-                        </select>
-                    </div>
-
-                    <!-- حاوية الكاميرا -->
-                    <div id="reader-container"
-                        style="display: none; margin-bottom: 20px; border-radius: 12px; overflow: hidden; border: 2px solid var(--secondary);">
-                        <div id="reader" width="100%"></div>
-                        <button type="button" class="btn-secondary"
-                            style="margin-top:10px; padding: 10px 20px; font-size:14px; width: 100%; border-radius: 0 0 10px 10px;"
-                            onclick="stopScanner()">إيقاف الكاميرا ❌</button>
-                    </div>
-
-                    <!-- حقل إدخال الباركود وزر التشغيل -->
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <input type="text" name="PatientBarcode" id="patientBarcodeInput"
-                            placeholder="أدخل كود المريض هنا (مجبر)..." required style="flex: 1;">
-                        <button type="button" class="btn-primary" id="btnScan" onclick="startScanner()"
-                            style="padding: 10px 15px; font-size: 14px; display: flex; align-items: center; gap: 5px;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
-                                <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
-                                <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
-                                <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
-                                <path d="M8 7v10"></path>
-                                <path d="M12 7v10"></path>
-                                <path d="M16 7v10"></path>
-                            </svg>
-                            مسح بالكاميرا
-                        </button>
-                    </div>
-
-                    <input type="text" name="PatientName" placeholder="أدخل اسمك هنا (اختياري)..." id="patientNameInput"
-                        style="margin-bottom: 15px;">
-                    <input type="tel" name="PatientMobile" placeholder="أدخل رقم المحمول هنا (11 رقم على الأقل)..."
-                        id="patientMobileInput" dir="rtl" minlength="11" required>
+            <!-- تقييم الاستقبال -->
+            <div class="form-group text-center rating-group">
+                <label>موظفي الاستقبال</label>
+                <p class="desc">كيف تقيم سرعة التجاوب والاحترافية من موظفي الاستقبال؟</p>
+                <div class="emojis">
+                    <div class="emoji-wrapper" data-value="1"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
+                            class="emoji"><span>سيء جداً</span></div>
+                    <div class="emoji-wrapper" data-value="2"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
+                            class="emoji"><span>سيء</span></div>
+                    <div class="emoji-wrapper" data-value="3"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
+                            class="emoji"><span>مقبول</span></div>
+                    <div class="emoji-wrapper" data-value="4"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
+                            class="emoji"><span>جيد</span></div>
+                    <div class="emoji-wrapper" data-value="5"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
+                            class="emoji"><span>ممتاز</span></div>
                 </div>
-                <div class="step-actions right">
-                    <button type="button" class="next-btn btn-primary" onclick="nextStep(1)">التالي ➔</button>
-                </div>
+                <input type="hidden" name="ReceptionRating" id="receptionRatingInput" value="0" required>
             </div>
 
-            <!-- الخطوة 2: تقييم الاستقبال -->
-            <div class="step" id="step-2">
-                <div class="form-group text-center rating-group">
-                    <label>الخطوة 2: موظفي الاستقبال</label>
-                    <p class="desc">كيف تقيم سرعة التجاوب والاحترافية من موظفي الاستقبال؟</p>
-                    <div class="emojis">
-                        <div class="emoji-wrapper" data-value="1"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
-                                class="emoji"><span>سيء جداً</span></div>
-                        <div class="emoji-wrapper" data-value="2"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
-                                class="emoji"><span>سيء</span></div>
-                        <div class="emoji-wrapper" data-value="3"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
-                                class="emoji"><span>مقبول</span></div>
-                        <div class="emoji-wrapper" data-value="4"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
-                                class="emoji"><span>جيد</span></div>
-                        <div class="emoji-wrapper" data-value="5"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
-                                class="emoji"><span>ممتاز</span></div>
-                    </div>
-                    <input type="hidden" name="ReceptionRating" id="receptionRatingInput" value="0" required>
+            <!-- تقييم التمريض -->
+            <div class="form-group text-center rating-group">
+                <label>طاقم التمريض</label>
+                <p class="desc">كيف تقيم مهارة وتعاون طاقم التمريض أثناء سحب العينات أو التجهيز؟</p>
+                <div class="emojis">
+                    <div class="emoji-wrapper" data-value="1"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
+                            class="emoji"><span>سيء جداً</span></div>
+                    <div class="emoji-wrapper" data-value="2"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
+                            class="emoji"><span>سيء</span></div>
+                    <div class="emoji-wrapper" data-value="3"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
+                            class="emoji"><span>مقبول</span></div>
+                    <div class="emoji-wrapper" data-value="4"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
+                            class="emoji"><span>جيد</span></div>
+                    <div class="emoji-wrapper" data-value="5"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
+                            class="emoji"><span>ممتاز</span></div>
                 </div>
-                <div class="step-actions split">
-                    <button type="button" class="prev-btn btn-secondary" onclick="prevStep(2)">➔ السابق</button>
-                    <button type="button" class="next-btn btn-primary" onclick="nextStep(2)">التالي ➔</button>
-                </div>
+                <input type="hidden" name="NursingRating" id="nursingRatingInput" value="0" required>
             </div>
 
-            <!-- الخطوة 3: تقييم التمريض -->
-            <div class="step" id="step-3">
-                <div class="form-group text-center rating-group">
-                    <label>الخطوة 3: طاقم التمريض</label>
-                    <p class="desc">كيف تقيم مهارة وتعاون طاقم التمريض أثناء سحب العينات أو التجهيز؟</p>
-                    <div class="emojis">
-                        <div class="emoji-wrapper" data-value="1"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
-                                class="emoji"><span>سيء جداً</span></div>
-                        <div class="emoji-wrapper" data-value="2"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
-                                class="emoji"><span>سيء</span></div>
-                        <div class="emoji-wrapper" data-value="3"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
-                                class="emoji"><span>مقبول</span></div>
-                        <div class="emoji-wrapper" data-value="4"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
-                                class="emoji"><span>جيد</span></div>
-                        <div class="emoji-wrapper" data-value="5"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
-                                class="emoji"><span>ممتاز</span></div>
-                    </div>
-                    <input type="hidden" name="NursingRating" id="nursingRatingInput" value="0" required>
+            <!-- تقييم الأطباء -->
+            <div class="form-group text-center rating-group">
+                <label>الأطباء المختصين</label>
+                <p class="desc">كيف تقيم كفاءة وتعاون فنى الاشعة أثناء الفحص؟</p>
+                <div class="emojis">
+                    <div class="emoji-wrapper" data-value="1"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
+                            class="emoji"><span>سيء جداً</span></div>
+                    <div class="emoji-wrapper" data-value="2"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
+                            class="emoji"><span>سيء</span></div>
+                    <div class="emoji-wrapper" data-value="3"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
+                            class="emoji"><span>مقبول</span></div>
+                    <div class="emoji-wrapper" data-value="4"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
+                            class="emoji"><span>جيد</span></div>
+                    <div class="emoji-wrapper" data-value="5"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
+                            class="emoji"><span>ممتاز</span></div>
                 </div>
-                <div class="step-actions split">
-                    <button type="button" class="prev-btn btn-secondary" onclick="prevStep(3)">➔ السابق</button>
-                    <button type="button" class="next-btn btn-primary" onclick="nextStep(3)">التالي ➔</button>
-                </div>
+                <input type="hidden" name="DoctorsRating" id="doctorsRatingInput" value="0" required>
             </div>
 
-            <!-- الخطوة 4: تقييم الأطباء -->
-            <div class="step" id="step-4">
-                <div class="form-group text-center rating-group">
-                    <label>الخطوة 4: الأطباء المختصين</label>
-                    <p class="desc">كيف تقيم كفاءة وتعاون فنى الاشعة أثناء الفحص؟</p>
-                    <div class="emojis">
-                        <div class="emoji-wrapper" data-value="1"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
-                                class="emoji"><span>سيء جداً</span></div>
-                        <div class="emoji-wrapper" data-value="2"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
-                                class="emoji"><span>سيء</span></div>
-                        <div class="emoji-wrapper" data-value="3"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
-                                class="emoji"><span>مقبول</span></div>
-                        <div class="emoji-wrapper" data-value="4"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
-                                class="emoji"><span>جيد</span></div>
-                        <div class="emoji-wrapper" data-value="5"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
-                                class="emoji"><span>ممتاز</span></div>
-                    </div>
-                    <input type="hidden" name="DoctorsRating" id="doctorsRatingInput" value="0" required>
+            <!-- تقييم الأجهزة -->
+            <div class="form-group text-center rating-group">
+                <label>جودة الأجهزة</label>
+                <p class="desc">ما مدى رضاك عن حداثة وكفاءة الأجهزة المستخدمة؟</p>
+                <div class="emojis">
+                    <div class="emoji-wrapper" data-value="1"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
+                            class="emoji"><span>سيء جداً</span></div>
+                    <div class="emoji-wrapper" data-value="2"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
+                            class="emoji"><span>سيء</span></div>
+                    <div class="emoji-wrapper" data-value="3"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
+                            class="emoji"><span>مقبول</span></div>
+                    <div class="emoji-wrapper" data-value="4"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
+                            class="emoji"><span>جيد</span></div>
+                    <div class="emoji-wrapper" data-value="5"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
+                            class="emoji"><span>ممتاز</span></div>
                 </div>
-                <div class="step-actions split">
-                    <button type="button" class="prev-btn btn-secondary" onclick="prevStep(4)">➔ السابق</button>
-                    <button type="button" class="next-btn btn-primary" onclick="nextStep(4)">التالي ➔</button>
-                </div>
+                <input type="hidden" name="EquipmentRating" id="equipmentRatingInput" value="0" required>
             </div>
 
-            <!-- الخطوة 5: تقييم الأجهزة -->
-            <div class="step" id="step-5">
-                <div class="form-group text-center rating-group">
-                    <label>الخطوة 5: جودة الأجهزة</label>
-                    <p class="desc">ما مدى رضاك عن حداثة وكفاءة الأجهزة المستخدمة؟</p>
-                    <div class="emojis">
-                        <div class="emoji-wrapper" data-value="1"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
-                                class="emoji"><span>سيء جداً</span></div>
-                        <div class="emoji-wrapper" data-value="2"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
-                                class="emoji"><span>سيء</span></div>
-                        <div class="emoji-wrapper" data-value="3"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
-                                class="emoji"><span>مقبول</span></div>
-                        <div class="emoji-wrapper" data-value="4"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
-                                class="emoji"><span>جيد</span></div>
-                        <div class="emoji-wrapper" data-value="5"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
-                                class="emoji"><span>ممتاز</span></div>
-                    </div>
-                    <input type="hidden" name="EquipmentRating" id="equipmentRatingInput" value="0" required>
+            <!-- تقييم العمال والتنظيف -->
+            <div class="form-group text-center rating-group">
+                <label>العمال والنظافة</label>
+                <p class="desc">ما مدى رضاك عن مستوى نظافة المركز وتعاون طاقم العمال؟</p>
+                <div class="emojis">
+                    <div class="emoji-wrapper" data-value="1"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
+                            class="emoji"><span>سيء جداً</span></div>
+                    <div class="emoji-wrapper" data-value="2"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
+                            class="emoji"><span>سيء</span></div>
+                    <div class="emoji-wrapper" data-value="3"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
+                            class="emoji"><span>مقبول</span></div>
+                    <div class="emoji-wrapper" data-value="4"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
+                            class="emoji"><span>جيد</span></div>
+                    <div class="emoji-wrapper" data-value="5"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
+                            class="emoji"><span>ممتاز</span></div>
                 </div>
-                <div class="step-actions split">
-                    <button type="button" class="prev-btn btn-secondary" onclick="prevStep(5)">➔ السابق</button>
-                    <button type="button" class="next-btn btn-primary" onclick="nextStep(5)">التالي ➔</button>
-                </div>
+                <input type="hidden" name="CleaningRating" id="cleaningRatingInput" value="0" required>
             </div>
 
-            <!-- الخطوة 6: تقييم العمال والتنظيف -->
-            <div class="step" id="step-6">
-                <div class="form-group text-center rating-group">
-                    <label>الخطوة 6: العمال والنظافة</label>
-                    <p class="desc">ما مدى رضاك عن مستوى نظافة المركز وتعاون طاقم العمال؟</p>
-                    <div class="emojis">
-                        <div class="emoji-wrapper" data-value="1"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
-                                class="emoji"><span>سيء جداً</span></div>
-                        <div class="emoji-wrapper" data-value="2"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
-                                class="emoji"><span>سيء</span></div>
-                        <div class="emoji-wrapper" data-value="3"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
-                                class="emoji"><span>مقبول</span></div>
-                        <div class="emoji-wrapper" data-value="4"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
-                                class="emoji"><span>جيد</span></div>
-                        <div class="emoji-wrapper" data-value="5"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
-                                class="emoji"><span>ممتاز</span></div>
-                    </div>
-                    <input type="hidden" name="CleaningRating" id="cleaningRatingInput" value="0" required>
+            <!-- تقييم التسليم -->
+            <div class="form-group text-center rating-group">
+                <label>تسليم النتائج</label>
+                <p class="desc">كيف كانت تجربة استلام النتائج من حيث الدقة وسرعة التسليم؟</p>
+                <div class="emojis">
+                    <div class="emoji-wrapper" data-value="1"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
+                            class="emoji"><span>سيء جداً</span></div>
+                    <div class="emoji-wrapper" data-value="2"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
+                            class="emoji"><span>سيء</span></div>
+                    <div class="emoji-wrapper" data-value="3"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
+                            class="emoji"><span>مقبول</span></div>
+                    <div class="emoji-wrapper" data-value="4"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
+                            class="emoji"><span>جيد</span></div>
+                    <div class="emoji-wrapper" data-value="5"><img
+                            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
+                            class="emoji"><span>ممتاز</span></div>
                 </div>
-                <div class="step-actions split">
-                    <button type="button" class="prev-btn btn-secondary" onclick="prevStep(6)">➔ السابق</button>
-                    <button type="button" class="next-btn btn-primary" onclick="nextStep(6)">التالي ➔</button>
-                </div>
+                <input type="hidden" name="HandoverRating" id="handoverRatingInput" value="0" required>
             </div>
 
-            <!-- الخطوة 7: تقييم التسليم -->
-            <div class="step" id="step-7">
-                <div class="form-group text-center rating-group">
-                    <label>الخطوة 7: تسليم النتائج</label>
-                    <p class="desc">كيف كانت تجربة استلام النتائج من حيث الدقة وسرعة التسليم؟</p>
-                    <div class="emojis">
-                        <div class="emoji-wrapper" data-value="1"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً"
-                                class="emoji"><span>سيء جداً</span></div>
-                        <div class="emoji-wrapper" data-value="2"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء"
-                                class="emoji"><span>سيء</span></div>
-                        <div class="emoji-wrapper" data-value="3"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول"
-                                class="emoji"><span>مقبول</span></div>
-                        <div class="emoji-wrapper" data-value="4"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد"
-                                class="emoji"><span>جيد</span></div>
-                        <div class="emoji-wrapper" data-value="5"><img
-                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز"
-                                class="emoji"><span>ممتاز</span></div>
-                    </div>
-                    <input type="hidden" name="HandoverRating" id="handoverRatingInput" value="0" required>
-                </div>
-                <div class="step-actions split">
-                    <button type="button" class="prev-btn btn-secondary" onclick="prevStep(7)">➔ السابق</button>
-                    <button type="button" class="next-btn btn-primary" onclick="nextStep(7)">التالي ➔</button>
-                </div>
+            <!-- المقترحات -->
+            <div class="form-group text-center">
+                <label>مقترحات أو شكاوى (اختياري)</label>
+                <p class="desc">هل لديك أي ملاحظات أخرى أو شكاوى لم نذكرها؟</p>
+                <textarea name="Comments" rows="4" placeholder="يسعدنا سماع صوتك..."></textarea>
             </div>
 
-            <!-- الخطوة 8: المقترحات -->
-            <div class="step" id="step-8">
-                <div class="form-group text-center">
-                    <label>الخطوة 8: مقترحات أو شكاوى (اختياري)</label>
-                    <p class="desc">هل لديك أي ملاحظات أخرى أو شكاوى لم نذكرها؟</p>
-                    <textarea name="Comments" rows="4" placeholder="يسعدنا سماع صوتك..."></textarea>
-                </div>
-                <div class="step-actions split">
-                    <button type="button" class="prev-btn btn-secondary" onclick="prevStep(8)">➔ السابق</button>
-                    <button type="submit" class="submit-btn btn-primary" id="submitBtn">إرسال التقييم الآن</button>
-                </div>
+            <button type="submit" class="submit-btn btn-primary" id="submitBtn" style="margin-top: 20px;">إرسال التقييم
+                الآن</button>
 
-                <div class="success-message" id="successMessage" style="display: none;">
-                    ✅ شكراً لك! تم الإرسال بنجاح. نتمنى لك دوام الصحة والعافية.
-                </div>
+            <div class="success-message" id="successMessage" style="display: none;">
+                ✅ شكراً لك! تم الإرسال بنجاح. نتمنى لك دوام الصحة والعافية.
+            </div>
 
-                <div class="error-message" id="errorMessage" style="display: none;">
-                    ❌ حدث خطأ ما. يرجى التأكد من اتصالك بالإنترنت والمحاولة مجدداً.
-                </div>
+            <div class="error-message" id="errorMessage" style="display: none;">
+                ❌ حدث خطأ ما. يرجى التأكد من اتصالك بالإنترنت والمحاولة مجدداً.
             </div>
 
         </form>
