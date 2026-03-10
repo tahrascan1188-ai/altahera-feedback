@@ -27,6 +27,12 @@ body {
     padding: 40px 20px;
     direction: rtl;
     /* لضمان دعم اللغة العربية بشكل صحيح */
+    transition: padding-bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.keyboard-active {
+    /* مساحة إضافية في الأسفل لتجنب تغطية الكيبورد للمحتوى */
+    padding-bottom: 250px;
 }
 
 /* تأثير Glassmorphism للبطاقة الرئيسية */
@@ -39,7 +45,10 @@ body {
     padding: 45px 40px;
     box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.6);
-    animation: fadeUpCard 0.8s ease-out forwards;
+}
+
+.feedback-card.show {
+    animation: fadeUpCard 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 @keyframes fadeUpCard {
@@ -181,6 +190,80 @@ select:focus {
     background: #ffffff;
     outline: none;
     box-shadow: 0 0 0 4px rgba(138, 42, 116, 0.1);
+}
+
+/* ==================================
+   شاشة البداية (Splash Screen)
+   ================================== */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-gradient);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-screen.hidden {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+    pointer-events: none;
+}
+
+.splash-logo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 30px;
+    box-shadow: 0 20px 40px rgba(138, 42, 116, 0.2);
+    animation: pulseLogo 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes pulseLogo {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 15px 35px rgba(138, 42, 116, 0.2);
+    }
+
+    100% {
+        transform: scale(1.1);
+        box-shadow: 0 30px 60px rgba(138, 42, 116, 0.4);
+    }
+}
+
+.splash-title {
+    font-size: 45px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 15px;
+    animation: splashFadeInUp 1s ease-out;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.splash-subtitle {
+    font-size: 20px;
+    color: var(--text-light);
+    font-weight: 700;
+    animation: splashFadeInUp 1.2s ease-out infinite alternate;
+}
+
+@keyframes splashFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ==================================
@@ -510,5 +593,142 @@ select:focus {
 
     .header h1 {
         font-size: 22px;
+    }
+}
+
+/* ==================================
+   لوحة المفاتيح الافتراضية الذكية (Virtual Tech Keyboard)
+   ================================== */
+.virtual-keyboard {
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    /* Light theme matching card */
+    backdrop-filter: blur(15px);
+    border-top: 3px solid var(--primary);
+    box-shadow: 0 -10px 40px rgba(92, 26, 75, 0.15);
+    /* Primary color shadow */
+    padding: 10px 10px 20px 10px;
+    z-index: 10000;
+    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 20px 20px 0 0;
+}
+
+.virtual-keyboard.active {
+    bottom: 0;
+}
+
+.vk-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px 10px;
+    border-bottom: 1px solid rgba(92, 26, 75, 0.1);
+    /* Primary color borderline */
+    margin-bottom: 10px;
+}
+
+.vk-title {
+    color: var(--primary);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.vk-close-btn {
+    background: rgba(92, 26, 75, 0.05);
+    /* Primary color background */
+    border: none;
+    color: var(--primary);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vk-close-btn:hover {
+    background: var(--primary);
+    color: white;
+    transform: rotate(90deg);
+}
+
+.vk-keys {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    /* تقليل المسافات لتقليل ارتفاع الكيبورد */
+    max-width: 800px;
+    /* جعل الكيبورد أعرض */
+    margin: 0 auto;
+}
+
+.vk-key {
+    background: #f8f9fa;
+    /* Light gray background matching inputs */
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    color: var(--text-dark);
+    font-size: 22px;
+    font-weight: 700;
+    padding: 10px 0;
+    /* تقليل الارتفاع */
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: center;
+    user-select: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    /* إزالة التأثير الداخلي */
+}
+
+.vk-key:active {
+    transform: scale(0.97) translateY(2px);
+    background: rgba(138, 42, 116, 0.1);
+    /* Secondary color */
+    border-color: var(--secondary);
+    color: var(--primary);
+}
+
+.vk-key.action-key {
+    background: #e9ecef;
+    font-size: 18px;
+}
+
+.vk-key.arrow-key {
+    background: #f1f3f5;
+    color: var(--primary);
+    font-size: 18px;
+    box-shadow: 0 2px 5px rgba(92, 26, 75, 0.1);
+}
+
+.vk-key.delete-key {
+    color: #ef4444;
+}
+
+.vk-key.enter-key {
+    background: var(--primary);
+    color: white;
+}
+
+.vk-key.enter-key:active {
+    background: var(--secondary);
+    color: white;
+}
+
+@media (min-width: 768px) {
+    .virtual-keyboard {
+        max-width: 800px;
+        /* أعرض في الشاشات الكبيرة */
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 24px 24px 0 0;
+        border-left: 3px solid var(--primary);
+        border-right: 3px solid var(--primary);
     }
 }

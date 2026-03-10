@@ -3,9 +3,9 @@
 
 <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <title>تقييم مركز الطاهرة للأشعة والتحاليل الطبية</title>
-        <link rel="stylesheet" href="style.css?v=3">
+        <link rel="stylesheet" href="style.css?v=4">
         <!-- إضافة ايقونة التبويب في المتصفح -->
         <link rel="icon" type="image/x-icon" href="CleanIcon-9.jpg">
         <!-- استخدام خطوط جوجل الحديثة (Tajawal) لتجربة UI احترافية -->
@@ -14,7 +14,14 @@
 </head>
 
 <body>
-        <div class="feedback-card">
+        <!-- شاشة البداية (Splash Screen) -->
+        <div id="splashScreen" class="splash-screen">
+                <img src="CleanIcon-9.jpg" alt="شعار الطاهرة" class="splash-logo">
+                <h1 class="splash-title">تقييمك يهمنا</h1>
+                <p class="splash-subtitle">اضغط هنا للبدء ✨</p>
+        </div>
+
+        <div class="feedback-card" id="mainCard" style="display: none;">
                 <div class="header">
                         <!-- أيقونة تعبيرية كشعار رمزي -->
                         <img src="CleanIcon-9.jpg" alt="شعار الطاهرة" class="logo">
@@ -103,6 +110,17 @@
                         </div>
 
                 </form>
+        </div>
+
+        <!-- الكيبورد الافتراضي التكنولوجي -->
+        <div id="virtualKeyboard" class="virtual-keyboard">
+                <div class="vk-header">
+                        <span class="vk-title">لوحة المفاتيح الذكية</span>
+                        <button type="button" class="vk-close-btn" id="vkCloseBtn">✖</button>
+                </div>
+                <div class="vk-keys" id="vkKeysContainer">
+                        <!-- مفاتيح الأرقام سيتم إدراجها هنا عبر JavaScript لتكون تفاعلية -->
+                </div>
         </div>
 
         <script src="script.js"></script>
