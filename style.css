@@ -193,6 +193,31 @@ select:focus {
 }
 
 /* ==================================
+   الخلية العائمة فوق الكيبورد (Floating Input)
+   ================================== */
+.floating-input-placeholder {
+    /* يُستخدم لحفظ مكان العنصر الأصلي عندما يطير العنصر فوق الكيبورد */
+    visibility: hidden;
+}
+
+.floating-input-active {
+    position: fixed !important;
+    bottom: calc(var(--keyboard-top, 300px) + 20px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 90% !important;
+    max-width: 600px !important;
+    z-index: 10001 !important;
+    box-shadow: 0 15px 35px rgba(92, 26, 75, 0.3) !important;
+    border: 3px solid var(--primary) !important;
+    border-radius: 16px !important;
+    background: #ffffff !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    padding: 18px !important;
+    font-size: 18px !important;
+}
+
+/* ==================================
    شاشة البداية (Splash Screen)
    ================================== */
 .splash-screen {

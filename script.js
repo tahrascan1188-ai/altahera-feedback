@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const vkCloseBtn = document.getElementById('vkCloseBtn');
 
     let activeInput = null;
+    let inputPlaceholder = null;
 
     // تعريف لوحة المفاتيح بناءً على نوع الحقل (نصي أم رقمي)
     const numberLayout = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'مسح', '0', 'إدخال'];
@@ -117,6 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openVirtualKeyboard(inputElement) {
+        if (activeInput === inputElement) return; // منع التكرار
+
         activeInput = inputElement;
 
         // لا نقوم بوضع readonly هنا لأننا نحتاج المؤشر (Caret) للتنقل باستخدام الأسهم
@@ -126,50 +129,65 @@ document.addEventListener('DOMContentLoaded', () => {
         const layout = (activeInput.type === 'tel') ? numberLayout : textLayout;
         renderKeyboard(layout);
 
+        // إنشاء بديل (Placeholder) يحفظ مكان العنصر الأصلي في الصفحة
+        inputPlaceholder = document.createElement(activeInput.tagName.toLowerCase());
+        inputPlaceholder.className = activeInput.className + ' floating-input-placeholder';
+        inputPlaceholder.style.height = activeInput.offsetHeight + 'px';
+        inputPlaceholder.style.width = activeInput.offsetWidth + 'px';
+        inputPlaceholder.style.margin = window.getComputedStyle(activeInput).margin;
+
+        // إدراج البديل بعد العنصر مباشرة
+        activeInput.parentNode.insertBefore(inputPlaceholder, activeInput.nextSibling);
+
+        // نقل الخلية إلى الـ body لكي يعمل position: fixed بشكل صحيح نسبة للشاشة
+        document.body.appendChild(activeInput);
+
         // إضافة مساحة للـ body أولاً لمنع الاختفاء تحت الكيبورد
         document.body.classList.add('keyboard-active');
 
         // عرض الكيبورد
         virtualKeyboard.classList.add('active');
 
-        // رفع الحقل ليكون مرئي بوضوح
-        setTimeout(() => {
-            const rect = activeInput.getBoundingClientRect();
-            // نحسب المسافة عشان الخلية تكون ظاهرة بوضوح
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const targetY = rect.top + scrollTop - (window.innerHeight / 3);
+        // رفع الحقل ليكون عائم (Floating)
+        requestAnimationFrame(() => {
+            // قياس ارتفاع الكيبورد لتحديد مكان الخلية
+            const vkHeight = virtualKeyboard.offsetHeight || 300;
+            document.documentElement.style.setProperty('--keyboard-top', vkHeight + 'px');
 
-            window.scrollTo({
-                top: targetY,
-                behavior: 'smooth'
-            });
-
-            // إضافة تأثير بصري للتركيز على الخلية
-            activeInput.style.transform = 'scale(1.02)';
-            activeInput.style.boxShadow = '0 0 15px rgba(138, 42, 116, 0.3)';
-            activeInput.style.border = '2px solid var(--primary)';
+            activeInput.classList.add('floating-input-active');
 
             // التركيز على الحقل لظهور المؤشر في نهايته
             activeInput.focus();
             const len = activeInput.value.length;
             activeInput.setSelectionRange(len, len);
-
-        }, 350); // ننتظر حتى يبدأ الأنيميشن
+        });
     }
 
     function closeVirtualKeyboard() {
+        if (!activeInput) return;
+
         virtualKeyboard.classList.remove('active');
         document.body.classList.remove('keyboard-active');
 
-        if (activeInput) {
-            // إزالة التأثير البصري
-            activeInput.style.transform = '';
-            activeInput.style.boxShadow = '';
-            activeInput.style.border = '';
+        // إزالة حالة العوم (Floating)
+        activeInput.classList.remove('floating-input-active');
 
-            activeInput.blur(); // إزالة التركيز نهائياً
-            activeInput = null;
+        // إزالة التأثيرات المباشرة إن وجدت
+        activeInput.style.transform = '';
+        activeInput.style.boxShadow = '';
+        activeInput.style.border = '';
+
+        activeInput.blur(); // إزالة التركيز نهائياً
+
+        // إزالة البديل (Placeholder) من الـ DOM وإعادة الخلية لمكانها
+        if (inputPlaceholder && inputPlaceholder.parentNode) {
+            inputPlaceholder.parentNode.insertBefore(activeInput, inputPlaceholder);
+            inputPlaceholder.parentNode.removeChild(inputPlaceholder);
+            inputPlaceholder = null;
         }
+
+        // مسح المرجع
+        activeInput = null;
     }
 
     // ربط الأحداث للحقول المستهدفة
