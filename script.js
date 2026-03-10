@@ -297,12 +297,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = 0);
                 document.querySelectorAll('.emoji-wrapper').forEach(e => e.classList.remove('selected'));
 
-                // العودة للحالة الأساسية
+                // العودة للحالة الأساسية وشاشة البداية
                 setTimeout(() => {
                     document.getElementById('successMessage').style.display = 'none';
                     submitBtn.innerText = 'إرسال التقييم الآن';
                     submitBtn.disabled = false;
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                    // إخفاء الفورم
+                    mainCard.classList.remove('show');
+
+                    setTimeout(() => {
+                        mainCard.style.display = 'none';
+
+                        // إرجاع شاشة البداية
+                        splashScreen.style.display = 'flex';
+                        requestAnimationFrame(() => {
+                            splashScreen.classList.remove('hidden');
+                        });
+                    }, 600); // وقت تأثير اختفاء الكارت
+
                 }, 4000);
             })
             .catch(error => {
