@@ -178,6 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function openVirtualKeyboard(inputElement) {
         if (activeInput === inputElement) return; // منع التكرار
 
+        // إذا كان هناك حقل مفتوح بالفعل، نغلقه ونعيده لمكانه أولاً
+        if (activeInput) {
+            closeVirtualKeyboard(false); // false means don't hide the keyboard itself, just reset the input
+        }
+
         activeInput = inputElement;
 
         // لا نقوم بوضع readonly هنا لأننا نحتاج المؤشر (Caret) للتنقل باستخدام الأسهم
@@ -221,19 +226,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function closeVirtualKeyboard() {
+    function closeVirtualKeyboard(hideKeyboard = true) {
         if (!activeInput) return;
 
-        virtualKeyboard.classList.remove('active');
-        document.body.classList.remove('keyboard-active');
-
-        // إزالة حالة العوم (Floating)
+        // إزالة الكلاسات الخاصة بالعنصر العائم والـ body
         activeInput.classList.remove('floating-input-active');
-
-        // إزالة التأثيرات المباشرة إن وجدت
-        activeInput.style.transform = '';
-        activeInput.style.boxShadow = '';
-        activeInput.style.border = '';
 
         activeInput.blur(); // إزالة التركيز نهائياً
 
@@ -244,8 +241,19 @@ document.addEventListener('DOMContentLoaded', () => {
             inputPlaceholder = null;
         }
 
-        // مسح المرجع
         activeInput = null;
+
+        if (hideKeyboard) {
+            document.body.classList.remove('keyboard-active');
+            virtualKeyboard.classList.remove('active');
+
+            // إخفاء الكيبورد بعد انتهاء حركة الانيميشن
+            setTimeout(() => {
+                if (!virtualKeyboard.classList.contains('active')) {
+                    // reset something if needed
+                }
+            }, 400);
+        }
     }
 
     // ربط الأحداث للحقول المستهدفة
