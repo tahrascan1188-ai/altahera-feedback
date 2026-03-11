@@ -32,88 +32,146 @@ document.addEventListener('DOMContentLoaded', () => {
     const vkCloseBtn = document.getElementById('vkCloseBtn');
 
     let activeInput = null;
-    let inputPlaceholder = null;
+    // حالة لغة الكيبورد الحالية (العربية افتراضياً)
+    let currentLang = 'ar';
+    let isCapsOn = false;
 
-    // تعريف لوحة المفاتيح بناءً على نوع الحقل (نصي أم رقمي)
-    const numberLayout = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'مسح', '0', 'إدخال'];
-
-    // تم إضافة الأسهم الأربعة لتسهيل التنقل
-    const textLayout = [
-        'د', 'ج', 'ح', 'خ', 'ه', 'ع', 'غ', 'ف', 'ق', 'ث', 'ص', 'ض',
-        'ط', 'ك', 'م', 'ن', 'ت', 'ا', 'ل', 'ب', 'ي', 'س', 'ش', 'ظ',
-        'ز', 'و', 'ة', 'ى', 'لا', 'ر', 'ؤ', 'ء', 'ئ', 'مسافة', 'مسح', 'إدخال',
-        '⬅️', '⬇️', '⬆️', '➡️'
+    // تعريف لوحة المفاتيح الافتراضية بشكل شبيه بكيبورد الكمبيوتر (PC Layout)
+    const pcNumberLayout = [
+        ['1', '2', '3'],
+        ['4', '5', '6'],
+        ['7', '8', '9'],
+        ['مسح', '0', 'إدخال']
     ];
 
-    function renderKeyboard(layout) {
+    const pcTextLayoutAr = [
+        ['Esc', 'ذ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'مسح'],
+        ['Tab', 'ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'خ', 'ح', 'ج', 'د', '\\', 'Del'],
+        ['Caps', 'ش', 'س', 'ي', 'ب', 'ل', 'ا', 'ت', 'ن', 'م', 'ك', 'ط', 'إدخال'],
+        ['Shift', 'ئ', 'ء', 'ؤ', 'ر', 'لا', 'ى', 'ة', 'و', 'ز', 'ظ', 'Shift'],
+        ['Fn', 'Ctrl', '🌐', 'Alt', 'مسافة', 'Alt', 'Ctrl', '⬅️', '⬇️', '⬆️', '➡️']
+    ];
+
+    const pcTextLayoutEn = [
+        ['Esc', '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
+        ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'Del'],
+        ['Caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter'],
+        ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Shift'],
+        ['Fn', 'Ctrl', '🌐', 'Alt', 'Space', 'Alt', 'Ctrl', '⬅️', '⬇️', '⬆️', '➡️']
+    ];
+
+    function renderKeyboard(layoutRows) {
         vkKeysContainer.innerHTML = '';
+        vkKeysContainer.className = 'vk-keys-pc';
 
-        // تعديل الشبكة بناءً على النوع
-        if (layout === numberLayout) {
-            vkKeysContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
-        } else {
-            vkKeysContainer.style.gridTemplateColumns = 'repeat(6, 1fr)';
-        }
+        layoutRows.forEach(row => {
+            const rowElement = document.createElement('div');
+            rowElement.classList.add('vk-row');
 
-        layout.forEach(key => {
-            const keyElement = document.createElement('div');
-            keyElement.classList.add('vk-key');
-            keyElement.textContent = key;
+            row.forEach(key => {
+                const keyElement = document.createElement('div');
+                keyElement.classList.add('vk-key');
+                keyElement.textContent = key;
 
-            if (key === 'مسح') {
-                keyElement.classList.add('action-key', 'delete-key');
-            } else if (key === 'إدخال') {
-                keyElement.classList.add('action-key', 'enter-key');
-            } else if (key === 'مسافة') {
-                keyElement.classList.add('action-key');
-                keyElement.style.gridColumn = 'span 4'; // زر المسافة أعرض
-            } else if (['⬅️', '⬇️', '⬆️', '➡️'].includes(key)) {
-                keyElement.classList.add('action-key', 'arrow-key');
-            }
-
-            // إضافة تفاعل الزر
-            keyElement.addEventListener('mousedown', (e) => {
-                e.preventDefault(); // الأهم: منع فقدان التركيز (focus) حتى يظل المؤشر يعمل
-            });
-
-            keyElement.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (!activeInput) return;
-
-                // الحصول على موضع المؤشر الحالي
-                let startPos = activeInput.selectionStart;
-                let endPos = activeInput.selectionEnd;
-
-                if (key === 'مسح') {
-                    if (startPos > 0) {
-                        const val = activeInput.value;
-                        activeInput.value = val.slice(0, startPos - 1) + val.slice(endPos);
-                        activeInput.setSelectionRange(startPos - 1, startPos - 1);
-                    }
-                } else if (key === 'إدخال') {
-                    closeVirtualKeyboard();
-                } else if (key === '➡️') {
-                    // يسار عربي (تحريك المؤشر لليمين في السياق الإنجليزي، والعكس في العربي)
-                    // في النصوص العربية (RTL)، التحصين لليسار يعني التقدم في النص
-                    activeInput.setSelectionRange(startPos + 1, startPos + 1);
-                } else if (key === '⬅️') {
-                    if (startPos > 0) activeInput.setSelectionRange(startPos - 1, startPos - 1);
-                } else if (key === '⬆️') {
-                    activeInput.setSelectionRange(0, 0); // أول النص
-                } else if (key === '⬇️') {
-                    activeInput.setSelectionRange(activeInput.value.length, activeInput.value.length); // آخر النص
-                } else {
-                    // إدراج نص عادي
-                    const charToInsert = (key === 'مسافة') ? ' ' : key;
-                    const val = activeInput.value;
-                    activeInput.value = val.slice(0, startPos) + charToInsert + val.slice(endPos);
-
-                    // تحريك المؤشر للأمام بعد الإدخال
-                    activeInput.setSelectionRange(startPos + charToInsert.length, startPos + charToInsert.length);
+                // Handle special classes
+                if (key === 'مسح' || key === 'Backspace') {
+                    keyElement.classList.add('action-key', 'delete-key', 'wide-key');
+                    keyElement.innerHTML = '&#9003;'; // Backspace symbol
+                } else if (key === 'إدخال' || key === 'Enter') {
+                    keyElement.classList.add('action-key', 'enter-key', 'wide-key');
+                    keyElement.textContent = 'Enter';
+                } else if (key === 'مسافة' || key === 'Space') {
+                    keyElement.classList.add('action-key', 'space-key');
+                    keyElement.textContent = '';
+                } else if (key === '🌐') {
+                    keyElement.classList.add('action-key', 'lang-key');
+                    keyElement.textContent = currentLang === 'ar' ? 'En' : 'عربي';
+                    keyElement.style.color = '#fff';
+                    keyElement.style.background = 'var(--primary)';
+                } else if (['Shift', 'Caps', 'Tab', 'Esc', 'Del', 'Fn', 'Ctrl', 'Win', 'Alt'].includes(key)) {
+                    keyElement.classList.add('action-key', 'modifier-key');
+                    if (['Shift', 'Caps', 'Tab'].includes(key)) keyElement.classList.add('wide-key');
+                    if (key === 'Caps' && isCapsOn) keyElement.style.background = 'var(--primary)';
+                } else if (['⬅️', '⬇️', '⬆️', '➡️'].includes(key)) {
+                    keyElement.classList.add('action-key', 'arrow-key');
+                } else if (isCapsOn && currentLang === 'en' && /^[a-z]$/i.test(key)) {
+                    // Update key display if caps lock is on
+                    keyElement.textContent = key.toUpperCase();
                 }
-            });
 
-            vkKeysContainer.appendChild(keyElement);
+                // إضافة تفاعل الزر
+                keyElement.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                });
+
+                keyElement.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (!activeInput) return;
+
+                    let startPos = activeInput.selectionStart;
+                    let endPos = activeInput.selectionEnd;
+
+                    if (key === '🌐') {
+                        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+                        renderKeyboard(currentLang === 'ar' ? pcTextLayoutAr : pcTextLayoutEn);
+                        activeInput.focus();
+                        return;
+                    }
+
+                    if (key === 'Caps') {
+                        isCapsOn = !isCapsOn;
+                        renderKeyboard(currentLang === 'ar' ? pcTextLayoutAr : pcTextLayoutEn);
+                        activeInput.focus();
+                        return;
+                    }
+
+                    if (['Esc', 'Shift', 'Ctrl', 'Win', 'Alt', 'Fn', 'Tab', 'Del'].includes(key)) {
+                        if (key === 'Del') {
+                            if (startPos < activeInput.value.length) {
+                                const val = activeInput.value;
+                                activeInput.value = val.slice(0, startPos) + val.slice(startPos + 1);
+                                activeInput.setSelectionRange(startPos, startPos);
+                            }
+                        } else if (key === 'Tab') {
+                            const val = activeInput.value;
+                            activeInput.value = val.slice(0, startPos) + '   ' + val.slice(endPos);
+                            activeInput.setSelectionRange(startPos + 3, startPos + 3);
+                        }
+                        return;
+                    }
+
+                    if (key === 'مسح' || key === 'Backspace') {
+                        if (startPos > 0) {
+                            const val = activeInput.value;
+                            activeInput.value = val.slice(0, startPos - 1) + val.slice(endPos);
+                            activeInput.setSelectionRange(startPos - 1, startPos - 1);
+                        }
+                    } else if (key === 'إدخال' || key === 'Enter') {
+                        closeVirtualKeyboard();
+                    } else if (key === '➡️') {
+                        // التحريك لليمين (يتقدم في الإنجليزي) ولكن في السياق العربي يختلف، هنا سيعتمد على اتجاه النص (RTL/LTR)
+                        activeInput.setSelectionRange(startPos + 1, startPos + 1);
+                    } else if (key === '⬅️') {
+                        if (startPos > 0) activeInput.setSelectionRange(startPos - 1, startPos - 1);
+                    } else if (key === '⬆️') {
+                        activeInput.setSelectionRange(0, 0);
+                    } else if (key === '⬇️') {
+                        activeInput.setSelectionRange(activeInput.value.length, activeInput.value.length);
+                    } else {
+                        let charToInsert = (key === 'مسافة' || key === 'Space') ? ' ' : key;
+                        if (isCapsOn && currentLang === 'en' && /^[a-z]$/i.test(key)) {
+                            charToInsert = charToInsert.toUpperCase();
+                        }
+
+                        const val = activeInput.value;
+                        activeInput.value = val.slice(0, startPos) + charToInsert + val.slice(endPos);
+                        activeInput.setSelectionRange(startPos + charToInsert.length, startPos + charToInsert.length);
+                    }
+                });
+
+                rowElement.appendChild(keyElement);
+            });
+            vkKeysContainer.appendChild(rowElement);
         });
     }
 
@@ -126,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // سنعتمد على e.preventDefault() في mousedown و touchstart لمنع الكيبورد الأصلية
 
         // اختيار التخطيط المناسب وتكوين الكيبورد
-        const layout = (activeInput.type === 'tel') ? numberLayout : textLayout;
+        const layout = (activeInput.type === 'tel') ? pcNumberLayout : (currentLang === 'ar' ? pcTextLayoutAr : pcTextLayoutEn);
         renderKeyboard(layout);
 
         // إنشاء بديل (Placeholder) يحفظ مكان العنصر الأصلي في الصفحة
