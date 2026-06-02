@@ -58,36 +58,116 @@
                                         </select>
                                 </div>
 
-                                <input type="text" name="PatientName" placeholder="أدخل اسم المريض هنا (اجبارى)..."
-                                        id="patientNameInput" style="margin-bottom: 15px;" required>
-                                <input type="tel" name="PatientMobile"
-                                        placeholder="أدخل رقم المحمول هنا (11 رقم على الأقل)..." id="patientMobileInput"
-                                        dir="rtl" minlength="11" required>
+                                <div style="text-align: right; margin-bottom: 15px;">
+                                        <label for="patientNameInput" style="font-weight: bold;">اسم المريض:</label>
+                                        <input type="text" name="PatientName" placeholder="....................................................................."
+                                                id="patientNameInput" style="margin-top: 5px;" required>
+                                </div>
+                                <div style="text-align: right; margin-bottom: 15px;">
+                                        <label for="dateInput" style="font-weight: bold;">التاريـــخ:</label>
+                                        <input type="date" name="Date" id="dateInput" style="margin-top: 5px;" required>
+                                </div>
+                                <div style="text-align: right; margin-bottom: 15px;">
+                                        <label for="dobInput" style="font-weight: bold;">تاريخ الميلاد:</label>
+                                        <input type="date" name="DOB" id="dobInput" style="margin-top: 5px;" required>
+                                </div>
+                                <div style="text-align: right; margin-bottom: 15px;">
+                                        <label for="patientMobileInput" style="font-weight: bold;">رقم الهاتف:</label>
+                                        <input type="tel" name="PatientMobile"
+                                                placeholder="....................................................................." id="patientMobileInput"
+                                                dir="rtl" minlength="11" style="margin-top: 5px;" required>
+                                </div>
                         </div>
 
-                        <!-- التقييم العام للزيارة -->
+                        <!-- السؤال الأول -->
                         <div class="form-group text-center rating-group">
-                                <label>التقييم العام للزيارة</label>
-                                <p class="desc">كيف تقيم إجمالي تجربتك لزيارة الفرع والحصول على الخدمة؟</p>
+                                <label>كيف تقيم وقت الانتظار للحصول على الخدمة؟</label>
                                 <div class="emojis">
-                                        <div class="emoji-wrapper" data-value="1"><img
-                                                        src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp"
-                                                        alt="سيء جداً" class="emoji"><span>سيء جداً</span></div>
-                                        <div class="emoji-wrapper" data-value="2"><img
-                                                        src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp"
-                                                        alt="سيء" class="emoji"><span>سيء</span></div>
-                                        <div class="emoji-wrapper" data-value="3"><img
-                                                        src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp"
-                                                        alt="مقبول" class="emoji"><span>مقبول</span></div>
-                                        <div class="emoji-wrapper" data-value="4"><img
-                                                        src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp"
-                                                        alt="جيد" class="emoji"><span>جيد</span></div>
-                                        <div class="emoji-wrapper" data-value="5"><img
-                                                        src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp"
-                                                        alt="ممتاز" class="emoji"><span>ممتاز</span></div>
+                                        <div class="emoji-wrapper" data-value="1"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً" class="emoji"><span>سيء جداً</span></div>
+                                        <div class="emoji-wrapper" data-value="2"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء" class="emoji"><span>سيء</span></div>
+                                        <div class="emoji-wrapper" data-value="3"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول" class="emoji"><span>مقبول</span></div>
+                                        <div class="emoji-wrapper" data-value="4"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد" class="emoji"><span>جيد</span></div>
+                                        <div class="emoji-wrapper" data-value="5"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز" class="emoji"><span>ممتاز</span></div>
                                 </div>
-                                <!-- نرسل التقييم كملاحظة الاستقبال هنا حتى لا نحتاج لتغيير أعمدة Google Sheets القديمة أو نستبدله برقم عام -->
-                                <input type="hidden" name="OverallRating" id="overallRatingInput" value="0" required>
+                                <input type="hidden" name="WaitTimeRating" id="waitTimeRatingInput" value="0" required>
+                        </div>
+
+                        <!-- السؤال الثاني -->
+                        <div class="form-group text-center rating-group">
+                                <label>ما مدى رضاءك عن كفاءة معاملة فريق التمريض؟</label>
+                                <div class="emojis">
+                                        <div class="emoji-wrapper" data-value="1"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً" class="emoji"><span>سيء جداً</span></div>
+                                        <div class="emoji-wrapper" data-value="2"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء" class="emoji"><span>سيء</span></div>
+                                        <div class="emoji-wrapper" data-value="3"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول" class="emoji"><span>مقبول</span></div>
+                                        <div class="emoji-wrapper" data-value="4"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد" class="emoji"><span>جيد</span></div>
+                                        <div class="emoji-wrapper" data-value="5"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز" class="emoji"><span>ممتاز</span></div>
+                                </div>
+                                <input type="hidden" name="NursingRating" id="nursingRatingInput" value="0" required>
+                        </div>
+
+                        <!-- السؤال الثالث -->
+                        <div class="form-group text-center rating-group">
+                                <label>ما مدى رضائك عن أداء وكفاءة مسؤولي الحجز والتسجيل؟</label>
+                                <div class="emojis">
+                                        <div class="emoji-wrapper" data-value="1"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً" class="emoji"><span>سيء جداً</span></div>
+                                        <div class="emoji-wrapper" data-value="2"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء" class="emoji"><span>سيء</span></div>
+                                        <div class="emoji-wrapper" data-value="3"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول" class="emoji"><span>مقبول</span></div>
+                                        <div class="emoji-wrapper" data-value="4"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد" class="emoji"><span>جيد</span></div>
+                                        <div class="emoji-wrapper" data-value="5"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز" class="emoji"><span>ممتاز</span></div>
+                                </div>
+                                <input type="hidden" name="ReceptionRating" id="receptionRatingInput" value="0" required>
+                        </div>
+
+                        <!-- السؤال الرابع -->
+                        <div class="form-group text-center rating-group">
+                                <label>ما مدى رضاك عن نظافة المكان وبيئة العمل؟</label>
+                                <div class="emojis">
+                                        <div class="emoji-wrapper" data-value="1"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً" class="emoji"><span>سيء جداً</span></div>
+                                        <div class="emoji-wrapper" data-value="2"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء" class="emoji"><span>سيء</span></div>
+                                        <div class="emoji-wrapper" data-value="3"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول" class="emoji"><span>مقبول</span></div>
+                                        <div class="emoji-wrapper" data-value="4"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد" class="emoji"><span>جيد</span></div>
+                                        <div class="emoji-wrapper" data-value="5"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز" class="emoji"><span>ممتاز</span></div>
+                                </div>
+                                <input type="hidden" name="CleaningRating" id="cleaningRatingInput" value="0" required>
+                        </div>
+
+                        <!-- السؤال الخامس -->
+                        <div class="form-group text-center rating-group">
+                                <label>ما مدى وضوح التعليمات المقدمة قبل الفحص وبعده؟</label>
+                                <div class="emojis">
+                                        <div class="emoji-wrapper" data-value="1"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً" class="emoji"><span>سيء جداً</span></div>
+                                        <div class="emoji-wrapper" data-value="2"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء" class="emoji"><span>سيء</span></div>
+                                        <div class="emoji-wrapper" data-value="3"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول" class="emoji"><span>مقبول</span></div>
+                                        <div class="emoji-wrapper" data-value="4"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد" class="emoji"><span>جيد</span></div>
+                                        <div class="emoji-wrapper" data-value="5"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز" class="emoji"><span>ممتاز</span></div>
+                                </div>
+                                <input type="hidden" name="InstructionsRating" id="instructionsRatingInput" value="0" required>
+                        </div>
+
+                        <!-- السؤال السادس -->
+                        <div class="form-group text-center rating-group">
+                                <label>ما مدى رضاك عن سرعة استلام التقرير أو النتيجة؟</label>
+                                <div class="emojis">
+                                        <div class="emoji-wrapper" data-value="1"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً" class="emoji"><span>سيء جداً</span></div>
+                                        <div class="emoji-wrapper" data-value="2"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء" class="emoji"><span>سيء</span></div>
+                                        <div class="emoji-wrapper" data-value="3"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول" class="emoji"><span>مقبول</span></div>
+                                        <div class="emoji-wrapper" data-value="4"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد" class="emoji"><span>جيد</span></div>
+                                        <div class="emoji-wrapper" data-value="5"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز" class="emoji"><span>ممتاز</span></div>
+                                </div>
+                                <input type="hidden" name="ResultSpeedRating" id="resultSpeedRatingInput" value="0" required>
+                        </div>
+
+                        <!-- السؤال السابع -->
+                        <div class="form-group text-center rating-group">
+                                <label>ما مدى احتمالية أن تنصح أحداً بالتعامل مع المركز؟</label>
+                                <div class="emojis">
+                                        <div class="emoji-wrapper" data-value="1"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/512.webp" alt="سيء جداً" class="emoji"><span>سيء جداً</span></div>
+                                        <div class="emoji-wrapper" data-value="2"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/512.webp" alt="سيء" class="emoji"><span>سيء</span></div>
+                                        <div class="emoji-wrapper" data-value="3"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/512.webp" alt="مقبول" class="emoji"><span>مقبول</span></div>
+                                        <div class="emoji-wrapper" data-value="4"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.webp" alt="جيد" class="emoji"><span>جيد</span></div>
+                                        <div class="emoji-wrapper" data-value="5"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" alt="ممتاز" class="emoji"><span>ممتاز</span></div>
+                                </div>
+                                <input type="hidden" name="RecommendRating" id="recommendRatingInput" value="0" required>
                         </div>
 
                         <!-- المقترحات -->
@@ -112,16 +192,7 @@
                 </form>
         </div>
 
-        <!-- الكيبورد الافتراضي التكنولوجي -->
-        <div id="virtualKeyboard" class="virtual-keyboard">
-                <div class="vk-header">
-                        <span class="vk-title">لوحة المفاتيح الذكية</span>
-                        <button type="button" class="vk-close-btn" id="vkCloseBtn">✖</button>
-                </div>
-                <div class="vk-keys" id="vkKeysContainer">
-                        <!-- مفاتيح الأرقام سيتم إدراجها هنا عبر JavaScript لتكون تفاعلية -->
-                </div>
-        </div>
+
 
         <script src="script.js"></script>
 </body>
