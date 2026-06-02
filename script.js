@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const branchCheck = document.getElementById('branchSelect').value;
         const patientName = document.getElementById('patientNameInput').value.trim();
         const patientMobile = document.getElementById('patientMobileInput').value.trim();
-        const dateInput = document.getElementById('dateInput').value;
+
         const dobInput = document.getElementById('dobInput').value;
         const waitTimeRating = document.getElementById('waitTimeRatingInput').value;
         const nursingRating = document.getElementById('nursingRatingInput').value;
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultSpeedRating = document.getElementById('resultSpeedRatingInput').value;
         const recommendRating = document.getElementById('recommendRatingInput').value;
 
-        if (!branchCheck || !patientName || !patientMobile || !dateInput || !dobInput || 
+        if (!branchCheck || !patientName || !patientMobile || !dobInput || 
             waitTimeRating == 0 || nursingRating == 0 || receptionRating == 0 || 
             cleaningRating == 0 || instructionsRating == 0 || resultSpeedRating == 0 || recommendRating == 0) {
             alert("يرجى التأكد من ملء جميع البيانات والتقييم واختيار الفرع قبل الإرسال.");
@@ -91,7 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(form);
 
+        // إضافة الحقول القديمة كقيم افتراضية حتى لا يتعطل كود Google Apps Script إذا لم يتم تحديثه
+        formData.append('OverallRating', recommendRating);
+        formData.append('DoctorsRating', '0');
+        formData.append('EquipmentRating', '0');
+        formData.append('HandoverRating', '0');
         formData.append('PatientBarcode', 'لا يوجد');
+
+        // إضافة التاريخ والوقت تلقائياً من جهاز المريض
+        const now = new Date();
+        const formattedDate = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-US');
+        formData.append('Date', formattedDate);
 
         fetch(scriptURL, { method: 'POST', body: formData })
             .then(response => {
