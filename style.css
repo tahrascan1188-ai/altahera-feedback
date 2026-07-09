@@ -168,6 +168,7 @@ body.keyboard-active {
 input[type="text"],
 input[type="tel"],
 input[type="date"],
+input[type="number"],
 textarea,
 select {
     width: 100%;
@@ -183,12 +184,23 @@ select {
 input[type="text"]:focus,
 input[type="tel"]:focus,
 input[type="date"]:focus,
+input[type="number"]:focus,
 textarea:focus,
 select:focus {
     border-color: var(--secondary);
     background: #ffffff;
     outline: none;
     box-shadow: 0 0 0 4px rgba(138, 42, 116, 0.1);
+}
+
+/* إخفاء أسهم زيادة ونقص الأرقام الافتراضية في حقل السن ليتطابق مع باقي الحقول */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 
 /* ==================================
