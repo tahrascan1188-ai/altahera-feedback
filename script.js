@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const patientName = document.getElementById('patientNameInput').value.trim();
         const patientMobile = document.getElementById('patientMobileInput').value.trim();
 
-        const dobInput = document.getElementById('dobInput').value;
+        const ageInput = document.getElementById('ageInput').value;
         const waitTimeRating = document.getElementById('waitTimeRatingInput').value;
         const nursingRating = document.getElementById('nursingRatingInput').value;
         const receptionRating = document.getElementById('receptionRatingInput').value;
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultSpeedRating = document.getElementById('resultSpeedRatingInput').value;
         const recommendRating = document.getElementById('recommendRatingInput').value;
 
-        if (!branchCheck || !patientName || !patientMobile || !dobInput || 
+        if (!branchCheck || !patientName || !patientMobile || !ageInput || 
             waitTimeRating == 0 || nursingRating == 0 || receptionRating == 0 || 
             cleaningRating == 0 || instructionsRating == 0 || resultSpeedRating == 0 || recommendRating == 0) {
             alert("يرجى التأكد من ملء جميع البيانات والتقييم واختيار الفرع قبل الإرسال.");

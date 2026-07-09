@@ -65,8 +65,8 @@
                                 </div>
 
                                 <div style="text-align: right; margin-bottom: 15px;">
-                                        <label for="dobInput" style="font-weight: bold;">تاريخ الميلاد:</label>
-                                        <input type="date" name="DOB" id="dobInput" style="margin-top: 5px;" required>
+                                        <label for="ageInput" style="font-weight: bold;">السن:</label>
+                                        <input type="number" name="Age" id="ageInput" placeholder="....................................................................." style="margin-top: 5px;" min="1" max="120" required>
                                 </div>
                                 <div style="text-align: right; margin-bottom: 15px;">
                                         <label for="patientMobileInput" style="font-weight: bold;">رقم الهاتف:</label>
@@ -171,7 +171,7 @@
                         <div class="form-group text-center">
                                 <label>مقترحات أو شكاوى (اختياري)</label>
                                 <p class="desc">هل لديك أي ملاحظات أخرى أو شكاوى لم نذكرها؟</p>
-                                <textarea name="Comments" rows="4" placeholder="يسعدنا سماع صوتك..."></textarea>
+                                <textarea name="Comments" rows="4"></textarea>
                         </div>
 
                         <button type="submit" class="submit-btn btn-primary" id="submitBtn"
